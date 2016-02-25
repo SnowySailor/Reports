@@ -1,0 +1,4 @@
+<div>
+    ^{searchBar}
+    ^{renderReportTable reports}
+    

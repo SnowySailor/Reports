@@ -1,0 +1,24 @@
+User
+    ident Text
+    password Text Maybe
+    UniqueUser ident
+    deriving Typeable
+
+Report
+	time UTCTime
+	userOffenses Text
+	userId Int
+	displayName Text Maybe
+	ipAddress Text
+	email Text Maybe
+	reporterId Int Maybe
+	reporterName Text Maybe
+	staffMember Text
+	correctionIssued Text Maybe
+	incidentSummary Text Maybe
+	additionalActions Text Maybe
+	notes Text Maybe
+	closed Bool
+	deriving Show
+
+ -- By default this file is used in Model.hs (which is imported by Foundation.hs)

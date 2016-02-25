@@ -1,0 +1,17 @@
+table {
+	margin:auto;
+}
+
+td {
+	padding:5px;
+    word-wrap:break-word;
+    max-width:20em;
+}
+
+tr {
+	border-bottom: 2px solid black;
+}
+
+.tableHeader {
+	background-color:green;
+}
