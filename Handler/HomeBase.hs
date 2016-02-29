@@ -7,4 +7,4 @@ getHomeBaseR = do
 	login <- lookupSession "userId"
 	case login of
 		Nothing -> redirectUltDest LoginUserR
-		Just _ -> redirectUltDest HomeR
+		Just _  -> redirectUltDest HomeR

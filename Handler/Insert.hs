@@ -23,8 +23,8 @@ postInsertR = do
         reporterUserId = case reporterId of
                             Just a -> case R.decimal a of
                                         Right (val,_) -> Just val
-                                        _ -> Nothing
-                            _ -> Nothing
+                                        _             -> Nothing
+                            _      -> Nothing
         closed         = False
     _ <- runDB $ insert (Report time offense reportedUserId reportDisplayName reportIpAddress email reporterUserId reportName staffName correctionIssued summary additionalActions notes closed)
 

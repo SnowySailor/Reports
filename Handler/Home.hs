@@ -16,7 +16,7 @@ getHomeR = do
     case auth of
         Nothing -> do
             redirect LoginUserR
-        Just _ -> do
+        Just _  -> do
             sess <- getSession
             reports <- getReports
             defaultLayout $ do

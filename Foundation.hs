@@ -308,10 +308,10 @@ renderReport reports = [hamlet|
 
 credsMysql :: M.ConnectInfo
 credsMysql = M.defaultConnectInfo 
-    { M.connectHost = "0.0.0.0"
-    , M.connectUser = "root"
+    { M.connectHost     = "0.0.0.0"
+    , M.connectUser     = "root"
     , M.connectPassword = "rooty"
     , M.connectDatabase = "reports"
-    , M.connectPort = 3306
-    , M.connectPath = ""
+    , M.connectPort     = 3306
+    , M.connectPath     = ""
     }

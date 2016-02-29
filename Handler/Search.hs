@@ -17,7 +17,7 @@ postSearchR = do
             reports <- runDB $ selectList [ReportUserId ==. (read (T.unpack search) :: Int)] [Desc ReportId]
             renderReports reports
         _ -> do
-            defaultLayout [whamlet|Nothing to see here.|]
+            defaultLayout [whamlet|Unsupported search type.|]
 
 
 renderReports :: (MonoFoldable (t (Entity Report)), Foldable t) => t (Entity Report) -> HandlerT App IO Html

@@ -46,10 +46,10 @@ postLoginUserR = do
         redirectUltDest LoginUserR
         else do
             let singleUser:_ = creds
-                passSalt = fromString (salt singleUser)
-                passHash = fromString $ pack (realHash singleUser)
-                inputPass = E.encodeUtf8 password
-                inputHash = BB.encode . H.hash . BB.encode . B.concat $ map H.hash [inputPass, passSalt]
+                passSalt     = fromString (salt singleUser)
+                passHash     = fromString $ pack (realHash singleUser)
+                inputPass    = E.encodeUtf8 password
+                inputHash    = BB.encode . H.hash . BB.encode . B.concat $ map H.hash [inputPass, passSalt]
             if passHash == inputHash then do
                 loginData <- liftIO $ getUser [name] mconn
                 let user:_ = loginData
