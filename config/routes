@@ -5,13 +5,19 @@
 /robots.txt RobotsR GET
 
 /home HomeR GET POST
-/remove RemoveNameR POST
+/home/#Int64 PageR GET
+/ HomeBaseR GET
+
+
 /login LoginUserR GET POST
 /logout LogoutUserR GET POST
-/ HomeBaseR GET
+
+
 /edit/#ReportId EditR GET POST
 /mark-done/#ReportId MarkDoneR GET POST
 /add AddR GET POST
 /insert InsertR POST
+
+
 /search SearchR POST
 /view/#ReportId ViewR GET

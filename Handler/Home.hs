@@ -1,6 +1,7 @@
 module Handler.Home where
 
 import Import
+import qualified Database.Persist.Sql as DB
 
 -- This is a handler function for the GET request method on the HomeR
 -- resource pattern. All of your resource patterns are defined in
@@ -34,10 +35,27 @@ postRemoveNameR = do
     deleteSession "name"
     redirectUltDest HomeR
 
+
+getPageR :: Int64 -> Handler Html
+getPageR page = do
+    [Entity reid _] <- runDB $ selectList ([] :: [Filter Report]) [Desc ReportId, LimitTo 1]
+    let limit = (page - 1) * 30
+        lastEntry = DB.fromSqlKey reid
+        selectFrom = DB.toSqlKey $ lastEntry - limit
+    sess <- getSession
+    name <- lookupSession "fullName"
+    reports <- runDB $ selectList [ReportClosed ==. False, ReportId <=. selectFrom] [Desc ReportId, LimitTo 30]
+    defaultLayout $ do
+        setTitle "Reports"
+        [whamlet|Selecting from #{show $ DB.fromSqlKey selectFrom} to #{show $ (DB.fromSqlKey selectFrom) - (page * 30)}|]
+        $(widgetFile "report-list")
+
+
+
 getAllReports :: (YesodPersist site, YesodPersistBackend site ~ SqlBackend) => HandlerT site IO [Entity Report]
-getAllReports = runDB $ selectList ([] :: [Filter Report]) [Desc ReportTime]
+getAllReports = runDB $ selectList ([] :: [Filter Report]) [Desc ReportId, LimitTo 30]
 
 getReports:: (YesodPersist site, YesodPersistBackend site ~ SqlBackend) => HandlerT site IO [Entity Report]
-getReports = runDB $ selectList [ReportClosed ==. False] [Desc ReportTime]
+getReports = runDB $ selectList [ReportClosed ==. False] [Desc ReportId, LimitTo 30]
 
 

@@ -19,6 +19,7 @@ Report
 	additionalActions Text Maybe
 	notes Text Maybe
 	closed Bool
+    reportChain Int Maybe
 	deriving Show
 
  -- By default this file is used in Model.hs (which is imported by Foundation.hs)

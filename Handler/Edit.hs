@@ -1,6 +1,7 @@
 module Handler.Edit where
 
 import Import
+import qualified Database.Persist.Sql as DB
 --import qualified Data.Text (empty)
 
 getEditR :: ReportId -> Handler Html
@@ -33,7 +34,8 @@ postEditR reportId = do
         reporterid    = reportReporterId report
         reportername  = reportReporterName report
         closed        = False
-        newReport     = Report time offenses userid display ip email reporterid reportername staffName correctionIssued summary additionalActions notes closed
+        reportChain   = case reportReportChain report of; Just val -> Just val; Nothing -> Just $ fromIntegral $ DB.fromSqlKey reportId;
+        newReport     = Report time offenses userid display ip email reporterid reportername staffName correctionIssued summary additionalActions notes closed reportChain
     _ <- runDB $ insert newReport
     _ <- runDB $ update reportId [ReportClosed =. True]
     setMessage "Done"
