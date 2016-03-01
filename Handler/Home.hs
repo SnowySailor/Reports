@@ -41,14 +41,21 @@ getPageR page = do
     [Entity reid _] <- runDB $ selectList ([] :: [Filter Report]) [Desc ReportId, LimitTo 1]
     let limit = (page - 1) * 30
         lastEntry = DB.fromSqlKey reid
-        selectFrom = DB.toSqlKey $ lastEntry - limit
+        selectFromRaw = lastEntry - limit
+    calculateHidden <- runDB $ selectList [ReportClosed ==. True, ReportId >=. (DB.toSqlKey selectFromRaw)] []
+    let selectFrom = DB.toSqlKey $ (fromIntegral selectFromRaw) - (fromIntegral $ length calculateHidden)
     sess <- getSession
     name <- lookupSession "fullName"
     reports <- runDB $ selectList [ReportClosed ==. False, ReportId <=. selectFrom] [Desc ReportId, LimitTo 30]
     defaultLayout $ do
         setTitle "Reports"
-        [whamlet|Selecting from #{show $ DB.fromSqlKey selectFrom} to #{show $ (DB.fromSqlKey selectFrom) - (page * 30)}|]
+        [whamlet|Selecting from #{show $ DB.fromSqlKey selectFrom} to #{show $ (DB.fromSqlKey selectFrom) - 30}|]
         $(widgetFile "report-list")
+        [whamlet|
+            $if page > 1
+                <a href=@{PageR (page - 1)} >Previous
+            <a href=@{PageR (page + 1)} >Next
+        |]
 
 
 
