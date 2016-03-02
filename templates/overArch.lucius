@@ -24,3 +24,12 @@ tr {
 .table > tbody > tr > td {
     padding-left:12px;
 }
+
+.reportChainData {
+    border-right: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+}
+
+.singleReportTable {
+    width:50em;
+}

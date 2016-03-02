@@ -1,4 +1,3 @@
 1. Styling
-2. Rework renderMaybe and renderMaybeText to not show strings in renders.
-3. Add pages of reports. Limit each page to show 30 reports.
-4. Rework the SQL in the pages function to use MySQL.Simple so that I don't have to do a bunch of selecting with selectList. Will be more efficient.
+2. Add pages of reports. Limit each page to show 30 reports.
+3. Rework the SQL in the pages function to use MySQL.Simple so that I don't have to do a bunch of selecting with selectList. Will be more efficient.

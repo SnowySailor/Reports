@@ -12,11 +12,11 @@ getEditR reportId = do
                 <input type=text name=staffMember value=#{reportStaffMember report}><br>
                 <input type=text name=correctionIssued value=#{renderMaybeText $ reportCorrectionIssued report}><br>
                 <br>
-                <textarea name=incidentSummary>#{renderMaybeText $ reportIncidentSummary report}
+                <textarea rows=5 cols=50 name=incidentSummary>#{renderMaybeText $ reportIncidentSummary report}
                 <br>
-                <textarea name=additionalActions>#{renderMaybeText $ reportAdditionalActions report}
+                <textarea rows=5 cols=50 name=additionalActions>#{renderMaybeText $ reportAdditionalActions report}
                 <br>
-                <textarea name=notes>#{renderMaybeText $ reportNotes report}
+                <textarea rows=5 cols=50 name=notes>#{renderMaybeText $ reportNotes report}
                 <br>
                 <input type=submit value=Edit>
     |]

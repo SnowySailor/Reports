@@ -2,9 +2,6 @@ module Handler.LoginUser where
 
 import Import
 import qualified Database.MySQL.Simple as M
-import Database.MySQL.Simple.QueryResults
-import Database.MySQL.Simple.Result
-import Database.MySQL.Simple.QueryParams
 import qualified Crypto.Hash.MD5 as H (hash)
 import qualified Data.Text.Encoding as E (encodeUtf8)
 import qualified Data.ByteString as B (ByteString, concat)
@@ -63,32 +60,3 @@ postLoginUserR = do
                     setMessage "Incorrect login. Please try again."
                     redirectUltDest LoginUserR
 
-userQuery :: M.Query
-userQuery = "select user_name, user_id, full_name, user_group_id from users where user_group_id in (1,6,7) and user_name = ?"
-
-credsQuery :: M.Query
-credsQuery = "select password, password_salt from users where user_name = ?"
-
-getCreds :: QueryParams q => q -> M.Connection -> IO [Credentials]
-getCreds qs connect = do
-    creds <- M.query connect credsQuery qs
-    return creds
-
-getUser :: QueryParams q => q -> M.Connection -> IO [Staff]
-getUser qs connect = do
-    users <- M.query connect userQuery qs
-    return users
-
-data Staff = Staff {userName :: String, fullName :: String, userId :: Int, userGroup :: Int} deriving Show
-instance QueryResults Staff where
-    convertResults [fa,fb,fc,fd] [va,vb,vc,vd] = Staff {userName = a, userId = b, fullName = c, userGroup = d}
-        where a = convert fa va
-              b = convert fb vb
-              c = convert fc vc
-              d = convert fd vd
-
-data Credentials = Credentials {realHash :: String, salt :: String} deriving Show
-instance QueryResults Credentials where
-    convertResults [fa, fb] [va,vb] = Credentials {realHash = a, salt = b}
-        where a = convert fa va
-              b = convert fb vb

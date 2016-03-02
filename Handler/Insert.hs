@@ -2,6 +2,7 @@ module Handler.Insert where
 
 import Import
 import Data.Text.Read as R (decimal)
+import qualified Database.Persist.Sql as DB
 
 postInsertR :: Handler ()
 postInsertR = do
@@ -26,7 +27,7 @@ postInsertR = do
                             _      -> Nothing
         closed         = False
         reportChain    = Nothing
-    _ <- runDB $ insert (Report time offense reportedUserId reportDisplayName reportIpAddress email reporterUserId reportName staffName correctionIssued summary additionalActions notes closed reportChain)
-
+    insertId <- runDB $ insert (Report time offense reportedUserId reportDisplayName reportIpAddress email reporterUserId reportName staffName correctionIssued summary additionalActions notes closed reportChain)
+    _ <- runDB $ update insertId [ReportReportChain =. (Just $ fromIntegral $ DB.fromSqlKey insertId)]
     setMessage "Inserted"
     redirect HomeR

@@ -12,11 +12,14 @@ import qualified Yesod.Core.Unsafe as Unsafe
 --Custom
 import qualified Database.Persist.Sql as DB
 import Text.Lucius (luciusFile)
-import qualified Data.Text
+import qualified Data.Text as T
 import qualified Text.Blaze (ToMarkup)
 import qualified Text.Blaze.Internal (MarkupM)
 import qualified Database.MySQL.Simple as M
-import qualified Data.Time.Format as T
+import qualified Data.Time.Format as F
+import Database.MySQL.Simple.QueryResults
+import Database.MySQL.Simple.Result
+import Database.MySQL.Simple.QueryParams
 
 
 -- | The foundation datatype for your application. This can be a good place to
@@ -180,11 +183,11 @@ isUserAuthorized = do
 renderMaybeText :: Maybe Text -> Text
 renderMaybeText may = case may of
                     Just val -> val
-                    Nothing -> Data.Text.empty
+                    Nothing -> T.empty
 renderMaybe :: Show a => Maybe a -> Text
 renderMaybe may = case may of
-                    Just val -> Data.Text.pack $ show val
-                    Nothing -> Data.Text.empty
+                    Just val -> T.pack $ show val
+                    Nothing ->T.empty
 
 secretMessage :: String
 secretMessage = "there were so many cheeses he died"
@@ -207,7 +210,7 @@ renderReportTable reports = [hamlet|
             $forall Entity reportId report <- reports
                 <tr>
                     <td>#{DB.fromSqlKey reportId}
-                    <td>#{T.formatTime T.defaultTimeLocale "%F" $ reportTime report}
+                    <td>#{F.formatTime F.defaultTimeLocale "%F" $ reportTime report}
                     <td>#{reportUserOffenses report}
                     <td>#{reportUserId report}
                     <td>#{renderMaybeText $ reportDisplayName report}
@@ -244,13 +247,13 @@ renderReport reports = [hamlet|
         Nothing to see here
     $else  
         $forall Entity reportId report <- reports
-            <table .table .table-boardered>
+            <table .table .table-boardered .singleReportTable>
                 <tr>
                     <td .tableHeader>ID
                     <td>#{DB.fromSqlKey reportId}
                 <tr>
                     <td .tableHeader >Time
-                    <td>#{T.formatTime T.defaultTimeLocale "%F" $ reportTime report}
+                    <td>#{F.formatTime F.defaultTimeLocale "%F" $ reportTime report}
                 <tr>
                     <td .tableHeader >Offenses
                     <td>#{reportUserOffenses report}
@@ -302,6 +305,36 @@ pageSelection page = [whamlet|
             <a href=@{PageR (page + 1)} >Next
         |]
 
+userQuery :: M.Query
+userQuery = "select user_name, user_id, full_name, user_group_id from users where user_group_id in (1,6,7) and user_name = ?"
+
+credsQuery :: M.Query
+credsQuery = "select password, password_salt from users where user_name = ?"
+
+getCreds :: QueryParams q => q -> M.Connection -> IO [Credentials]
+getCreds qs connect = do
+    creds <- M.query connect credsQuery qs
+    return creds
+
+getUser :: QueryParams q => q -> M.Connection -> IO [Staff]
+getUser qs connect = do
+    users <- M.query connect userQuery qs
+    return users
+
+data Staff = Staff {userName :: String, fullName :: String, userId :: Int, userGroup :: Int} deriving Show
+instance QueryResults Staff where
+    convertResults [fa,fb,fc,fd] [va,vb,vc,vd] = Staff {userName = a, userId = b, fullName = c, userGroup = d}
+        where a = convert fa va
+              b = convert fb vb
+              c = convert fc vc
+              d = convert fd vd
+
+data Credentials = Credentials {realHash :: String, salt :: String} deriving Show
+instance QueryResults Credentials where
+    convertResults [fa, fb] [va,vb] = Credentials {realHash = a, salt = b}
+        where a = convert fa va
+              b = convert fb vb
+
 credsMysql :: M.ConnectInfo
 credsMysql = M.defaultConnectInfo 
     { M.connectHost     = "0.0.0.0"
@@ -311,3 +344,14 @@ credsMysql = M.defaultConnectInfo
     , M.connectPort     = 3306
     , M.connectPath     = ""
     }
+
+getReportTypes :: [Text]
+getReportTypes = map T.pack ["Administrative Abuse", "Drug Use", "Inappropriate Character", "Mini Modding", "Name Violation", "Spam / Unnessesary OOC", "[NSFW] Gore & Violence", "[NSFW] Nudity or Pornography/Sexual Material", "Attacks Individual or Group", "Copyright Infringement"]
+
+renderReportTypeOption :: t -> Text.Blaze.Internal.MarkupM ()
+renderReportTypeOption = [hamlet|
+    <select name="userOffenses">
+        $forall option <- getReportTypes
+            <option value=#{option}>#{option}
+    |]
+
