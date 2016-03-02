@@ -14,6 +14,7 @@ getHomeR :: Handler Html
 getHomeR = do
     auth <- lookupSession "userId"
     name <- lookupSession "fullName"
+    let page = 1
     case auth of
         Nothing -> do
             redirect LoginUserR
@@ -49,13 +50,7 @@ getPageR page = do
     reports <- runDB $ selectList [ReportClosed ==. False, ReportId <=. selectFrom] [Desc ReportId, LimitTo 30]
     defaultLayout $ do
         setTitle "Reports"
-        [whamlet|Selecting from #{show $ DB.fromSqlKey selectFrom} to #{show $ (DB.fromSqlKey selectFrom) - 30}|]
         $(widgetFile "report-list")
-        [whamlet|
-            $if page > 1
-                <a href=@{PageR (page - 1)} >Previous
-            <a href=@{PageR (page + 1)} >Next
-        |]
 
 
 

@@ -13,9 +13,14 @@ td {
 }
 
 tr {
-	border-bottom: 2px solid black;
+	/*border-bottom: 2px solid black;*/
 }
 
 .tableHeader {
-	background-color:green;
+	/*background-color:green;*/
+    font-weight:bold;
+}
+
+.table > tbody > tr > td {
+    padding-left:12px;
 }

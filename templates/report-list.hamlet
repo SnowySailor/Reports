@@ -10,4 +10,4 @@ $maybe fullName <- name
         Nothing to see here
     $else
         ^{renderReportTable reports}
-
+    ^{pageSelection page}

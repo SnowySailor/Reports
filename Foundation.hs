@@ -16,6 +16,7 @@ import qualified Data.Text
 import qualified Text.Blaze (ToMarkup)
 import qualified Text.Blaze.Internal (MarkupM)
 import qualified Database.MySQL.Simple as M
+import qualified Data.Time.Format as T
 
 
 -- | The foundation datatype for your application. This can be a good place to
@@ -193,7 +194,7 @@ renderReportTable reports = [hamlet|
     $if null reports
         Nothing to see here
     $else
-        <table border=1 .mainReportTable >
+        <table .table .table-boardered >
             <tr>
                 <td .tableHeader >ID
                 <td .tableHeader >Time
@@ -201,28 +202,22 @@ renderReportTable reports = [hamlet|
                 <td .tableHeader >UserId
                 <td .tableHeader >Display Name
                 <td .tableHeader >IP
-                <td .tableHeader >Email
-                <td .tableHeader >Reporter ID
-                <td .tableHeader >Reporter Name
                 <td .tableHeader >Staff Member
                 <td .tableHeader >Correction Issued
             $forall Entity reportId report <- reports
                 <tr>
                     <td>#{DB.fromSqlKey reportId}
-                    <td>#{show $ reportTime report}
+                    <td>#{T.formatTime T.defaultTimeLocale "%F" $ reportTime report}
                     <td>#{reportUserOffenses report}
                     <td>#{reportUserId report}
                     <td>#{renderMaybeText $ reportDisplayName report}
                     <td>#{reportIpAddress report}
-                    <td>#{renderMaybeText $ reportEmail report}
-                    <td>#{renderMaybe $ reportReporterId report}
-                    <td>#{renderMaybeText $ reportReporterName report}
                     <td>#{reportStaffMember report}
                     <td>#{renderMaybeText $ reportCorrectionIssued report}
-                    <td><a href=@{EditR reportId}><input type=button value=Edit>
+                    <td .edit ><a href=@{EditR reportId}><input type=button value=Edit>
                     $if not $ reportClosed report
-                        <td><a href=@{MarkDoneR reportId}><input type=button value="Mark Done">
-                    <td><a href=@{ViewR reportId}><input type=button value="View">
+                        <td .mark-done ><a href=@{MarkDoneR reportId}><input type=button value="Mark Done">
+                    <td .view ><a href=@{ViewR reportId}><input type=button value="View">
 |]
 
 searchBar :: Text.Blaze.ToMarkup a => (Route App -> [t] -> a) -> Text.Blaze.Internal.MarkupM ()
@@ -249,13 +244,13 @@ renderReport reports = [hamlet|
         Nothing to see here
     $else  
         $forall Entity reportId report <- reports
-            <table border=1>
+            <table .table .table-boardered>
                 <tr>
                     <td .tableHeader>ID
                     <td>#{DB.fromSqlKey reportId}
                 <tr>
                     <td .tableHeader >Time
-                    <td>#{show $ reportTime report}
+                    <td>#{T.formatTime T.defaultTimeLocale "%F" $ reportTime report}
                 <tr>
                     <td .tableHeader >Offenses
                     <td>#{reportUserOffenses report}
@@ -299,6 +294,13 @@ renderReport reports = [hamlet|
                     <td>
                         <a href=@{MarkDoneR reportId}><input type=button value="Mark Done">
 |]
+
+pageSelection :: (MonadIO m, MonadBaseControl IO m, MonadThrow m) => Int64 -> WidgetT App m ()
+pageSelection page = [whamlet|
+            $if page > 1
+                <a href=@{PageR (page - 1)} >Previous
+            <a href=@{PageR (page + 1)} >Next
+        |]
 
 credsMysql :: M.ConnectInfo
 credsMysql = M.defaultConnectInfo 
