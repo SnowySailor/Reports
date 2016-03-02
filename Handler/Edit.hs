@@ -9,11 +9,15 @@ getEditR reportId = do
     [Entity _ report] <- runDB $ selectList [ReportId ==. reportId] []
     defaultLayout [whamlet|
             <form method=post action=@{EditR reportId}>
-                <input type=text name=staffMember value=#{reportStaffMember report}>
-                <input type=text name=correctionIssued value=#{renderMaybeText $ reportCorrectionIssued report}>
+                <input type=text name=staffMember value=#{reportStaffMember report}><br>
+                <input type=text name=correctionIssued value=#{renderMaybeText $ reportCorrectionIssued report}><br>
+                <br>
                 <textarea name=incidentSummary>#{renderMaybeText $ reportIncidentSummary report}
+                <br>
                 <textarea name=additionalActions>#{renderMaybeText $ reportAdditionalActions report}
+                <br>
                 <textarea name=notes>#{renderMaybeText $ reportNotes report}
+                <br>
                 <input type=submit value=Edit>
     |]
 

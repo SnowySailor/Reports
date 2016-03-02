@@ -193,7 +193,7 @@ renderReportTable reports = [hamlet|
     $if null reports
         Nothing to see here
     $else
-        <table border=1>
+        <table border=1 .mainReportTable >
             <tr>
                 <td .tableHeader >ID
                 <td .tableHeader >Time
@@ -206,9 +206,6 @@ renderReportTable reports = [hamlet|
                 <td .tableHeader >Reporter Name
                 <td .tableHeader >Staff Member
                 <td .tableHeader >Correction Issued
-                <td .tableHeader >Summary
-                <td .tableHeader >Actions
-                <td .tableHeader >Notes
             $forall Entity reportId report <- reports
                 <tr>
                     <td>#{DB.fromSqlKey reportId}
@@ -222,9 +219,6 @@ renderReportTable reports = [hamlet|
                     <td>#{renderMaybeText $ reportReporterName report}
                     <td>#{reportStaffMember report}
                     <td>#{renderMaybeText $ reportCorrectionIssued report}
-                    <td>#{renderMaybeText $ reportIncidentSummary report}
-                    <td>#{renderMaybeText $ reportAdditionalActions report}
-                    <td>#{renderMaybeText $ reportNotes report}
                     <td><a href=@{EditR reportId}><input type=button value=Edit>
                     $if not $ reportClosed report
                         <td><a href=@{MarkDoneR reportId}><input type=button value="Mark Done">
@@ -270,34 +264,34 @@ renderReport reports = [hamlet|
                     <td>#{reportUserId report}
                 <tr>
                     <td .tableHeader >Display Name
-                    <td>#{renderMaybe $ reportDisplayName report}
+                    <td>#{renderMaybeText $ reportDisplayName report}
                 <tr>
                     <td .tableHeader >IP
                     <td>#{reportIpAddress report}
                 <tr>
                     <td .tableHeader >Email
-                    <td>#{renderMaybe $ reportEmail report}
+                    <td>#{renderMaybeText $ reportEmail report}
                 <tr>
                     <td .tableHeader >Reporter ID
                     <td>#{renderMaybe $ reportReporterId report}
                 <tr>
                     <td .tableHeader >Reporter Name
-                    <td>#{renderMaybe $ reportReporterName report}
+                    <td>#{renderMaybeText $ reportReporterName report}
                 <tr>
                     <td .tableHeader >Staff Member
                     <td>#{reportStaffMember report}
                 <tr>
                     <td .tableHeader >Correction Issued
-                    <td>#{renderMaybe $ reportCorrectionIssued report}
+                    <td>#{renderMaybeText $ reportCorrectionIssued report}
                 <tr>
                     <td .tableHeader >Summary
-                    <td>#{renderMaybe $ reportIncidentSummary report}
+                    <td>#{renderMaybeText $ reportIncidentSummary report}
                 <tr>
                     <td .tableHeader >Actions
-                    <td>#{renderMaybe $ reportAdditionalActions report}
+                    <td>#{renderMaybeText $ reportAdditionalActions report}
                 <tr>
                     <td .tableHeader >Notes
-                    <td>#{renderMaybe $ reportNotes report}
+                    <td>#{renderMaybeText $ reportNotes report}
                 <tr>
                     <td>
                         <a href=@{EditR reportId}><input type=button value="Edit">

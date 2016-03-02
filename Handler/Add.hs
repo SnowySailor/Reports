@@ -9,17 +9,21 @@ getAddR = defaultLayout [whamlet|
                 <option value="first">first
                 <option value="second">second
                 <option value="third">third
-            <input type=text name="reportUserId" placeholder="User ID">
-            <input type=text name="reportDisplayName" placeholder="Display Name">
-            <input type=text name="reportIpAddress" placeholder="IP Address">
-            <input type=text name="email" placeholder="Email">
-            <input type=text name="reporterId" placeholder="Reporter ID">
-            <input type=text name="reportName" placeholder="Reporter Name">
-            <input type=text name="staffMember" placeholder="Staff Member:">
-            <input type=text name="correctionIssued" placeholder="Correction Issued:">
+            <br>
+            <input type=text name="reportUserId" placeholder="User ID"><br>
+            <input type=text name="reportDisplayName" placeholder="Display Name"><br>
+            <input type=text name="reportIpAddress" placeholder="IP Address"><br>
+            <input type=text name="email" placeholder="Email"><br>
+            <input type=text name="reporterId" placeholder="Reporter ID"><br>
+            <input type=text name="reportName" placeholder="Reporter Name"><br>
+            <input type=text name="staffMember" placeholder="Staff Member:"><br>
+            <input type=text name="correctionIssued" placeholder="Correction Issued:"><br>
             <textarea name="incidentSummary" placeholder="Incident Summary">
+            <br>
             <textarea name="additionalActions" placeholder="Additional Actions">
+            <br>
             <textarea name="notes" placeholder="Notes">
+            <br>
             <input type=submit value=Submit>
     |]
 
@@ -37,16 +41,20 @@ postAddR = do
                 <option value="first">first
                 <option value="second">second
                 <option value="third">third
-            <input type=text name="reportUserId" placeholder="User ID" value=#{reportUserId}>
-            <input type=text name="reportDisplayName" placeholder="Display Name" value=#{renderMaybe reportDisplayName}>
-            <input type=text name="reportIpAddress" placeholder="IP Address" value=#{renderMaybe reportIpAddress}>
-            <input type=text name="email" placeholder="Email" value=#{renderMaybe reportEmail}>
-            <input type=text name="reporterId" placeholder="Reporter ID" value=#{renderMaybe reportReporterId}>
-            <input type=text name="reportName" placeholder="Reporter Name" value=#{renderMaybe reportReporterName}>
-            <input type=text name="staffMember" placeholder="Staff Member:">
-            <input type=text name="correctionIssued" placeholder="Correction Issued:">
+            <br>
+            <input type=text name="reportUserId" placeholder="User ID" value=#{reportUserId}><br>
+            <input type=text name="reportDisplayName" placeholder="Display Name" value=#{renderMaybe reportDisplayName}><br>
+            <input type=text name="reportIpAddress" placeholder="IP Address" value=#{renderMaybe reportIpAddress}><br>
+            <input type=text name="email" placeholder="Email" value=#{renderMaybe reportEmail}><br>
+            <input type=text name="reporterId" placeholder="Reporter ID" value=#{renderMaybe reportReporterId}><br>
+            <input type=text name="reportName" placeholder="Reporter Name" value=#{renderMaybe reportReporterName}><br>
+            <input type=text name="staffMember" placeholder="Staff Member:"><br>
+            <input type=text name="correctionIssued" placeholder="Correction Issued:"><br>
             <textarea name="incidentSummary" placeholder="Incident Summary">
+            <br>
             <textarea name="additionalActions" placeholder="Additional Actions">
+            <br>
             <textarea name="notes" placeholder="Notes">
+            <br>
             <input type=submit value=Submit>
     |]

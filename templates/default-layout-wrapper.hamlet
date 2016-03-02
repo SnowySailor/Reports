@@ -27,6 +27,8 @@ $newline never
       <header>
       <div id="main" role="main">
         ^{goHome}
+        <br>
+        <br>
         ^{pageBody pc}
       \<!--<footer>#{appCopyright $ appSettings master}-->
 
