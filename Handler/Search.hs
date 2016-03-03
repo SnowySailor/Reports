@@ -16,6 +16,10 @@ postSearchR = do
         "UserId" -> do 
             reports <- runDB $ selectList [ReportUserId ==. (read (T.unpack search) :: Int)] [Desc ReportId]
             renderReports reports
+
+        "Staff" -> do
+            reports <- runDB $ selectList [ReportStaffMember `like` search] [Desc ReportId]
+            renderReports reports
         _ -> do
             defaultLayout [whamlet|Unsupported search type.|]
 

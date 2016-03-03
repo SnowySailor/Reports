@@ -21,7 +21,7 @@ getLoginUserR = do
                     <input type=password name=password placeholder="Password:">
                     <input type=submit value="Login">
                 |]
-        Just login -> do
+        Just _ -> do
             sess <- getSession
             defaultLayout [whamlet|
                         You are logged in. 

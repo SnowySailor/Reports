@@ -229,6 +229,7 @@ searchBar = [hamlet|
         <select name="searchType">
             <option value="IP">IP
             <option value="UserId">User Id
+            <option value="Staff">Staff
         <input type=text name="search" placeholder="Search:">
         <input type=submit value="Search">
 |]
@@ -380,3 +381,5 @@ renderReportTypeOption = [hamlet|
             <option value=#{option}>#{option}
     |]
 
+like :: EntityField record Text -> Text -> Filter record
+field `like` val = Filter field (Left $ T.concat ["%", val, "%"]) (BackendSpecificFilter "like")
