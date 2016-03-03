@@ -242,6 +242,12 @@ goHome = [hamlet|
     <a .home href=@{HomeBaseR}>Go Home
 |]
 
+renderHeader = [hamlet|
+    <div #header>
+        ^{goHome}
+        <form .logout method=post action=@{LogoutUserR} ><input type=submit value="Logout">
+    |]
+
 renderReport :: (Text.Blaze.ToMarkup a, MonoFoldable (t (Entity Report)), Foldable t) => t (Entity Report) -> (Route App -> [t1] -> a) -> Text.Blaze.Internal.MarkupM ()
 renderReport reports = [hamlet|
     $if null reports
@@ -301,9 +307,11 @@ renderReport reports = [hamlet|
 
 pageSelection :: (MonadIO m, MonadBaseControl IO m, MonadThrow m) => Int64 -> WidgetT App m ()
 pageSelection page = [whamlet|
-            $if page > 1
-                <a href=@{PageR (page - 1)} >Previous
-            <a href=@{PageR (page + 1)} >Next
+            <div .pageSelection >
+                $if page > 1
+                    <a href=@{PageR (page - 1)} >Previous
+                    ...&nbsp;
+                <a href=@{PageR (page + 1)} >Next
         |]
 
 userQuery :: M.Query
@@ -374,10 +382,20 @@ credsMysql = M.defaultConnectInfo
 getReportTypes :: [Text]
 getReportTypes = map T.pack ["Administrative Abuse", "Drug Use", "Inappropriate Character", "Mini Modding", "Name Violation", "Spam / Unnessesary OOC", "[NSFW] Gore & Violence", "[NSFW] Nudity or Pornography/Sexual Material", "Attacks Individual or Group", "Copyright Infringement"]
 
+getCorrectionTypes :: [Text]
+getCorrectionTypes = map T.pack ["Warning", "Infraction", "Ban", "Verbal Warning"]
+
 renderReportTypeOption :: t -> Text.Blaze.Internal.MarkupM ()
 renderReportTypeOption = [hamlet|
     <select name="userOffenses">
         $forall option <- getReportTypes
+            <option value=#{option}>#{option}
+    |]
+
+renderCorrectionTypeOption :: t -> Text.Blaze.Internal.MarkupM ()
+renderCorrectionTypeOption = [hamlet|
+    <select name="correctionIssued">
+        $forall option <- getCorrectionTypes
             <option value=#{option}>#{option}
     |]
 

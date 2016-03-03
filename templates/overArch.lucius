@@ -33,3 +33,21 @@ tr {
 .singleReportTable {
     width:50em;
 }
+
+#header {
+    width:100%;
+    padding:20px;
+}
+
+.logout {
+    float:right;
+}
+
+.home {
+    float:left;
+}
+
+.pageSelection {
+    padding-bottom:20px;
+    padding-left:20px;
+}

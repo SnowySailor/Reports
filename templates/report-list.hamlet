@@ -1,8 +1,5 @@
 $maybe fullName <- name
     <p>Welcome, #{fullName}
-<p>Hello #{show sess} 
-<form method=post action=@{LogoutUserR} >
-    <input type=submit value="Logout">
 <div>
     <a href=@{AddR}><input type=button value="Add Report">
     ^{searchBar}

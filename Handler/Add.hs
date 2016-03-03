@@ -32,7 +32,7 @@ getAddR = defaultLayout [whamlet|
                     <td><input type=text name="staffMember" placeholder="Staff Member:">
                 <tr>
                     <td><label for="correctionIssued">Correction Issued: </label>
-                    <td><input type=text name="correctionIssued" placeholder="Correction Issued:">
+                    <td>^{renderCorrectionTypeOption}
                 <tr>
                     <td><label for="incidentSummary">Incident Summary: </label>
                     <td>
