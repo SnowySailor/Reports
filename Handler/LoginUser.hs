@@ -34,9 +34,7 @@ postLoginUserR :: Handler ()
 postLoginUserR = do
     name <- runInputPost $ ireq textField "user"
     password <- runInputPost $ ireq passwordField "password"
-    mconn <- liftIO $ M.connect credsMysql
-
-    creds <- liftIO $ getCreds [name] mconn
+    creds <- liftIO $ getCreds [name]
 
     if null creds then do
         setMessage "Invalid user."
@@ -48,7 +46,7 @@ postLoginUserR = do
                 inputPass    = E.encodeUtf8 password
                 inputHash    = BB.encode . H.hash . BB.encode . B.concat $ map H.hash [inputPass, passSalt]
             if passHash == inputHash then do
-                loginData <- liftIO $ getUser [name] mconn
+                loginData <- liftIO $ getUser [name]
                 let user:_ = loginData
                 setSession "userName"  $ pack (userName user)
                 setSession "fullName"  $ pack (fullName user)

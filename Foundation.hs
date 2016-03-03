@@ -311,15 +311,35 @@ userQuery = "select user_name, user_id, full_name, user_group_id from users wher
 credsQuery :: M.Query
 credsQuery = "select password, password_salt from users where user_name = ?"
 
-getCreds :: QueryParams q => q -> M.Connection -> IO [Credentials]
-getCreds qs connect = do
+chainIdsQuery :: M.Query
+chainIdsQuery = "select id from report where report_chain = ? and report_chain IS NOT NULL and id != ?"
+
+calculateHiddenQuery :: M.Query
+calculateHiddenQuery = "select count(*) from report where closed = 1 and id >= ?"
+
+getCreds :: QueryParams q => q -> IO [Credentials]
+getCreds qs = do
+    connect <- liftIO $ M.connect credsMysql
     creds <- M.query connect credsQuery qs
     return creds
 
-getUser :: QueryParams q => q -> M.Connection -> IO [Staff]
-getUser qs connect = do
+getUser :: QueryParams q => q -> IO [Staff]
+getUser qs = do
+    connect <- liftIO $ M.connect credsMysql
     users <- M.query connect userQuery qs
     return users
+
+getChainIds :: QueryParams q => q-> IO [SingleReturn]
+getChainIds qs = do
+    connect <- liftIO $ M.connect credsMysql
+    chains <- M.query connect chainIdsQuery qs
+    return chains
+
+getCalculateHidden :: QueryParams q => q -> IO [SingleReturn]
+getCalculateHidden qs = do
+    connect <- liftIO $ M.connect credsMysql
+    hidden <- M.query connect calculateHiddenQuery qs
+    return hidden
 
 data Staff = Staff {userName :: String, fullName :: String, userId :: Int, userGroup :: Int} deriving Show
 instance QueryResults Staff where
@@ -334,6 +354,11 @@ instance QueryResults Credentials where
     convertResults [fa, fb] [va,vb] = Credentials {realHash = a, salt = b}
         where a = convert fa va
               b = convert fb vb
+
+data SingleReturn = SingleReturn {ident :: Int} deriving Show
+instance QueryResults SingleReturn where
+    convertResults [fa] [va] = SingleReturn {ident = a}
+        where a = convert fa va
 
 credsMysql :: M.ConnectInfo
 credsMysql = M.defaultConnectInfo 

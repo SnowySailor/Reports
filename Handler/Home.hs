@@ -43,8 +43,9 @@ getPageR page = do
     let limit = (page - 1) * 30
         lastEntry = DB.fromSqlKey reid
         selectFromRaw = lastEntry - limit
-    calculateHidden <- runDB $ selectList [ReportClosed ==. True, ReportId >=. (DB.toSqlKey selectFromRaw)] []
-    let selectFrom = DB.toSqlKey $ (fromIntegral selectFromRaw) - (fromIntegral $ length calculateHidden)
+    --calculateHidden <- runDB $ selectList [ReportClosed ==. True, ReportId >=. (DB.toSqlKey selectFromRaw)] []
+    [SingleReturn calculateHidden] <- liftIO $ getCalculateHidden [selectFromRaw]
+    let selectFrom = DB.toSqlKey $ (fromIntegral selectFromRaw) - (fromIntegral $ calculateHidden)
     sess <- getSession
     name <- lookupSession "fullName"
     reports <- runDB $ selectList [ReportClosed ==. False, ReportId <=. selectFrom] [Desc ReportId, LimitTo 30]

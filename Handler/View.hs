@@ -2,13 +2,16 @@ module Handler.View where
 
 import Import
 import qualified Database.Persist.Sql as DB
+import qualified Database.MySQL.Simple as M
 
 getViewR :: ReportId -> Handler Html
 getViewR reportId = do
     report <- runDB $ selectList [ReportId ==. reportId] []
     let [Entity _ singleReport] = report
         reportChainId = reportReportChain $ singleReport
-    extraIds <- runDB $ selectList [ReportReportChain ==. reportChainId, ReportReportChain !=. Nothing, ReportId !=. reportId] []
+        currentReportId = DB.fromSqlKey reportId
+    --extraIds <- runDB $ selectList [ReportReportChain ==. reportChainId, ReportReportChain !=. Nothing, ReportId !=. reportId] []
+    extraIds <- liftIO $ getChainIds (reportChainId, currentReportId)
     defaultLayout [whamlet|
         ^{renderReport report}
         <br>
@@ -16,7 +19,7 @@ getViewR reportId = do
             <p>Report versions that came before or after this
             <table>
                 <tr>
-                    $forall Entity rId _ <- extraIds
-                        <td .reportChainData ><a href=@{ViewR rId}>#{DB.fromSqlKey rId}
+                    $forall SingleReturn rId <- extraIds
+                        <td .reportChainData ><a href=@{ViewR $ DB.toSqlKey $ fromIntegral rId}>#{rId}
     |]
  
