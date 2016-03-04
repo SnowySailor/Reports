@@ -1,10 +1,8 @@
 module Handler.LoginUser where
 
 import Import
-import qualified Database.MySQL.Simple as M
 import qualified Crypto.Hash.MD5 as H (hash)
 import qualified Data.Text.Encoding as E (encodeUtf8)
-import qualified Data.ByteString as B (ByteString, concat)
 import qualified Data.ByteString.Base16 as BB (encode)
 
 getLoginUserR :: Handler Html
@@ -44,7 +42,7 @@ postLoginUserR = do
                 passSalt     = fromString (salt singleUser)
                 passHash     = fromString $ pack (realHash singleUser)
                 inputPass    = E.encodeUtf8 password
-                inputHash    = BB.encode . H.hash . BB.encode . B.concat $ map H.hash [inputPass, passSalt]
+                inputHash    = BB.encode . H.hash . BB.encode . concat $ map H.hash [inputPass, passSalt]
             if passHash == inputHash then do
                 loginData <- liftIO $ getUser [name]
                 let user:_ = loginData

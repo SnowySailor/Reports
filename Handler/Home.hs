@@ -19,7 +19,6 @@ getHomeR = do
         Nothing -> do
             redirect LoginUserR
         Just _  -> do
-            sess <- getSession
             reports <- getReports
             defaultLayout $ do
                     setTitle "Reports"
@@ -47,7 +46,6 @@ getPageR page = do
     [SingleReturn calculateHidden] <- liftIO $ getCalculateHidden [selectFromRaw]
     --Needs reworked to actually work right.
     let selectFrom = DB.toSqlKey $ (fromIntegral selectFromRaw) - (fromIntegral $ calculateHidden)
-    sess <- getSession
     name <- lookupSession "fullName"
     reports <- runDB $ selectList [ReportClosed ==. False, ReportId <=. selectFrom] [Desc ReportId, LimitTo 30]
     defaultLayout $ do

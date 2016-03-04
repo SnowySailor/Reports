@@ -16,7 +16,7 @@ import qualified Data.Text as T
 import qualified Text.Blaze (ToMarkup)
 import qualified Text.Blaze.Internal (MarkupM)
 import qualified Database.MySQL.Simple as M
-import qualified Data.Time.Format as F
+import Data.Time.Format
 import Database.MySQL.Simple.QueryResults
 import Database.MySQL.Simple.Result
 import Database.MySQL.Simple.QueryParams
@@ -210,7 +210,7 @@ renderReportTable reports = [hamlet|
             $forall Entity reportId report <- reports
                 <tr>
                     <td>#{DB.fromSqlKey reportId}
-                    <td>#{F.formatTime F.defaultTimeLocale "%F" $ reportTime report}
+                    <td>#{formatTime defaultTimeLocale "%F" $ reportTime report}
                     <td>#{reportUserOffenses report}
                     <td>#{reportUserId report}
                     <td>#{renderMaybeText $ reportDisplayName report}
@@ -261,7 +261,7 @@ renderReport reports = [hamlet|
                     <td>#{DB.fromSqlKey reportId}
                 <tr>
                     <td .tableHeader >Time
-                    <td>#{F.formatTime F.defaultTimeLocale "%F" $ reportTime report}
+                    <td>#{formatTime defaultTimeLocale "%F" $ reportTime report}
                 <tr>
                     <td .tableHeader >Offenses
                     <td>#{reportUserOffenses report}
