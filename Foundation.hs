@@ -230,6 +230,7 @@ searchBar = [hamlet|
             <option value="IP">IP
             <option value="UserId">User Id
             <option value="Staff">Staff
+            <option value="Summary">Incident Summary
         <input type=text name="search" placeholder="Search:">
         <input type=submit value="Search">
 |]
@@ -401,3 +402,6 @@ renderCorrectionTypeOption = [hamlet|
 
 like :: EntityField record Text -> Text -> Filter record
 field `like` val = Filter field (Left $ T.concat ["%", val, "%"]) (BackendSpecificFilter "like")
+
+likeMaybe :: EntityField record (Maybe Text) -> Text -> Filter record
+field `likeMaybe` val = Filter field (Left $ Just (T.concat ["%", val, "%"])) (BackendSpecificFilter "like")

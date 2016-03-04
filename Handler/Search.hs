@@ -10,7 +10,7 @@ postSearchR = do
     search     <- runInputPost $ ireq textField "search"
     case searchType of
         "IP" -> do 
-            reports <- runDB $ selectList [ReportIpAddress ==. search] [Desc ReportId]
+            reports <- runDB $ selectList [ReportIpAddress `like` search] [Desc ReportId]
             renderReports reports
 
         "UserId" -> do 
@@ -20,6 +20,11 @@ postSearchR = do
         "Staff" -> do
             reports <- runDB $ selectList [ReportStaffMember `like` search] [Desc ReportId]
             renderReports reports
+
+        "Summary" -> do
+            reports <- runDB $ selectList [ReportIncidentSummary `likeMaybe` search] [Desc ReportId]
+            renderReports reports
+
         _ -> do
             defaultLayout [whamlet|Unsupported search type.|]
 
