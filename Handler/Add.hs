@@ -11,7 +11,7 @@ getAddR = defaultLayout [whamlet|
                     <td>^{renderReportTypeOption}
                 <tr>
                     <td><label for="reportUserId">User ID: </label>
-                    <td><input type=text required name="reportUserId" placeholder="User ID">
+                    <td><input type=number required name="reportUserId" placeholder="User ID">
                 <tr>
                     <td><label for="reportDisplayName">Display Name: </label>
                     <td><input type=text name="reportDisplayName" placeholder="Display Name">
@@ -23,7 +23,7 @@ getAddR = defaultLayout [whamlet|
                     <td><input type=text name="email" placeholder="Email">
                 <tr>
                     <td><label for="reporterId">Reporter User ID: </label>
-                    <td><input type=text name="reporterId" placeholder="Reporter ID">
+                    <td><input type=number name="reporterId" placeholder="Reporter ID">
                 <tr>
                     <td><label for="reportName">Reporter Name: </label>
                     <td><input type=text name="reportName" placeholder="Reporter Name">
@@ -65,7 +65,7 @@ postAddR = do
                     <td>^{renderReportTypeOption}
                 <tr>
                     <td><label for="reportUserId">User ID: </label>
-                    <td><input type=text required name="reportUserId" placeholder="User ID" value=#{renderMaybeText reportUserId}>
+                    <td><input type=number required name="reportUserId" placeholder="User ID" value=#{renderMaybeText reportUserId}>
                 <tr>
                     <td><label for="reportDisplayName">Display Name: </label>
                     <td><input type=text name="reportDisplayName" placeholder="Display Name" value=#{renderMaybeText reportDisplayName}>
@@ -77,7 +77,7 @@ postAddR = do
                     <td><input type=text name="email" placeholder="Email" value=#{renderMaybeText reportEmail}>
                 <tr>
                     <td><label for="reporterId">Reporter User ID: </label>
-                    <td><input type=text name="reporterId" placeholder="Reporter ID" value=#{renderMaybeText reportReporterId}>
+                    <td><input type=number name="reporterId" placeholder="Reporter ID" value=#{renderMaybeText reportReporterId}>
                 <tr>
                     <td><label for="reportName">Reporter Name: </label>
                     <td><input type=text name="reportName" placeholder="Reporter Name" value=#{renderMaybeText reportReporterName}>
