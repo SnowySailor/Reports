@@ -16,7 +16,6 @@ import qualified Data.Text as T
 import qualified Text.Blaze (ToMarkup)
 import qualified Text.Blaze.Internal (MarkupM)
 import qualified Database.MySQL.Simple as M
---import Data.Time.Format
 import Database.MySQL.Simple.QueryResults
 import Database.MySQL.Simple.Result
 import Database.MySQL.Simple.QueryParams
