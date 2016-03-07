@@ -2,7 +2,6 @@ module Handler.View where
 
 import Import
 import qualified Database.Persist.Sql as DB
-import qualified Database.MySQL.Simple as M
 
 getViewR :: ReportId -> Handler Html
 getViewR reportId = do

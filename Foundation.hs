@@ -16,7 +16,7 @@ import qualified Data.Text as T
 import qualified Text.Blaze (ToMarkup)
 import qualified Text.Blaze.Internal (MarkupM)
 import qualified Database.MySQL.Simple as M
-import Data.Time.Format
+--import Data.Time.Format
 import Database.MySQL.Simple.QueryResults
 import Database.MySQL.Simple.Result
 import Database.MySQL.Simple.QueryParams
@@ -329,46 +329,49 @@ calculateHiddenQuery = "select count(*) from report where closed = 1 and id >= ?
 
 getCreds :: QueryParams q => q -> IO [Credentials]
 getCreds qs = do
-    connect <- liftIO $ M.connect credsMysql
-    creds <- M.query connect credsQuery qs
+    connection <- liftIO $ M.connect credsMysql
+    creds <- M.query connection credsQuery qs
     return creds
 
 getUser :: QueryParams q => q -> IO [Staff]
 getUser qs = do
-    connect <- liftIO $ M.connect credsMysql
-    users <- M.query connect userQuery qs
+    connection <- liftIO $ M.connect credsMysql
+    users <- M.query connection userQuery qs
     return users
 
 getChainIds :: QueryParams q => q-> IO [SingleReturn]
 getChainIds qs = do
-    connect <- liftIO $ M.connect credsMysql
-    chains <- M.query connect chainIdsQuery qs
+    connection <- liftIO $ M.connect credsMysql
+    chains <- M.query connection chainIdsQuery qs
     return chains
 
 getCalculateHidden :: QueryParams q => q -> IO [SingleReturn]
 getCalculateHidden qs = do
-    connect <- liftIO $ M.connect credsMysql
-    hidden <- M.query connect calculateHiddenQuery qs
+    connection <- liftIO $ M.connect credsMysql
+    hidden <- M.query connection calculateHiddenQuery qs
     return hidden
 
-data Staff = Staff {userName :: String, fullName :: String, userId :: Int, userGroup :: Int} deriving Show
+data Staff = Staff {userName :: String, fullName :: String, userId :: Int, userGroup :: Int} | NoStaff deriving (Show, Eq)
 instance QueryResults Staff where
     convertResults [fa,fb,fc,fd] [va,vb,vc,vd] = Staff {userName = a, userId = b, fullName = c, userGroup = d}
         where a = convert fa va
               b = convert fb vb
               c = convert fc vc
               d = convert fd vd
+    convertResults _ _ = NoStaff
 
-data Credentials = Credentials {realHash :: String, salt :: String} deriving Show
+data Credentials = Credentials {realHash :: String, salt :: String} | NoCreds deriving (Show,Eq)
 instance QueryResults Credentials where
     convertResults [fa, fb] [va,vb] = Credentials {realHash = a, salt = b}
         where a = convert fa va
               b = convert fb vb
+    convertResults _ _ = NoCreds
 
-data SingleReturn = SingleReturn {ident :: Int} deriving Show
+data SingleReturn = SingleReturn {ident :: Int} | NoSingleReturn deriving (Show, Eq)
 instance QueryResults SingleReturn where
     convertResults [fa] [va] = SingleReturn {ident = a}
         where a = convert fa va
+    convertResults _ _ = NoSingleReturn
 
 credsMysql :: M.ConnectInfo
 credsMysql = M.defaultConnectInfo 

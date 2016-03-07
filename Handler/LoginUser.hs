@@ -34,7 +34,7 @@ postLoginUserR = do
     password <- runInputPost $ ireq passwordField "password"
     creds <- liftIO $ getCreds [name]
 
-    if null creds then do
+    if creds == [NoCreds] then do
         setMessage "Invalid user."
         redirectUltDest LoginUserR
         else do
