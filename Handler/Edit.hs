@@ -9,16 +9,27 @@ getEditR reportId = do
     [Entity _ report] <- runDB $ selectList [ReportId ==. reportId] []
     defaultLayout [whamlet|
             <form method=post action=@{EditR reportId}>
-                <input type=text name=staffMember value=#{reportStaffMember report}><br>
-                <input type=text name=correctionIssued value=#{renderMaybeText $ reportCorrectionIssued report}><br>
-                <br>
-                <textarea rows=5 cols=50 name=incidentSummary>#{renderMaybeText $ reportIncidentSummary report}
-                <br>
-                <textarea rows=5 cols=50 name=additionalActions>#{renderMaybeText $ reportAdditionalActions report}
-                <br>
-                <textarea rows=5 cols=50 name=notes>#{renderMaybeText $ reportNotes report}
-                <br>
-                <input type=submit value=Edit>
+                <table>
+                    <tr>
+                        <td><label for="staffMember">Staff member:
+                        <td><input type=text required name=staffMember value=#{reportStaffMember report}>
+                    <tr>
+                        <td><label for="correctionIssued">Correction Issued:
+                        <td><input type=text name=correctionIssued value=#{renderMaybeText $ reportCorrectionIssued report}>
+                    <tr>
+                        <td><label for="incidentSummary">Incident Summary:
+                        <td>
+                            <textarea rows=5 cols=50 name=incidentSummary>#{renderMaybeText $ reportIncidentSummary report}
+                    <tr>
+                        <td><label for="additionalActions">Additional Actions:
+                        <td>
+                            <textarea rows=5 cols=50 name=additionalActions>#{renderMaybeText $ reportAdditionalActions report}
+                    <tr>
+                        <td><label for="notes">Notes:
+                        <td>
+                            <textarea rows=5 cols=50 name=notes>#{renderMaybeText $ reportNotes report}
+                    <tr>
+                        <td><input type=submit value=Edit>
     |]
 
 postEditR :: ReportId -> Handler ()

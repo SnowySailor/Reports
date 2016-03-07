@@ -388,7 +388,7 @@ getCorrectionTypes = map T.pack ["Warning", "Infraction", "Ban", "Verbal Warning
 
 renderReportTypeOption :: t -> Text.Blaze.Internal.MarkupM ()
 renderReportTypeOption = [hamlet|
-    <select name="userOffenses">
+    <select name="userOffenses" required>
         $forall option <- getReportTypes
             <option value=#{option}>#{option}
     |]

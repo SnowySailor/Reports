@@ -11,13 +11,13 @@ getAddR = defaultLayout [whamlet|
                     <td>^{renderReportTypeOption}
                 <tr>
                     <td><label for="reportUserId">User ID: </label>
-                    <td><input type=text name="reportUserId" placeholder="User ID">
+                    <td><input type=text required name="reportUserId" placeholder="User ID">
                 <tr>
                     <td><label for="reportDisplayName">Display Name: </label>
                     <td><input type=text name="reportDisplayName" placeholder="Display Name">
                 <tr>
                     <td><label for="reportIpAddress">IP Address: </label>
-                    <td><input type=text name="reportIpAddress" placeholder="IP Address">
+                    <td><input type=text required name="reportIpAddress" placeholder="IP Address">
                 <tr>
                     <td><label for="email">Email: </label>
                     <td><input type=text name="email" placeholder="Email">
@@ -29,7 +29,7 @@ getAddR = defaultLayout [whamlet|
                     <td><input type=text name="reportName" placeholder="Reporter Name">
                 <tr>
                     <td><label for="staffMember">Staff Member (you): </label>
-                    <td><input type=text name="staffMember" placeholder="Staff Member:">
+                    <td><input type=text required name="staffMember" placeholder="Staff Member:">
                 <tr>
                     <td><label for="correctionIssued">Correction Issued: </label>
                     <td>^{renderCorrectionTypeOption}
@@ -65,13 +65,13 @@ postAddR = do
                     <td>^{renderReportTypeOption}
                 <tr>
                     <td><label for="reportUserId">User ID: </label>
-                    <td><input type=text name="reportUserId" placeholder="User ID" value=#{renderMaybeText reportUserId}>
+                    <td><input type=text required name="reportUserId" placeholder="User ID" value=#{renderMaybeText reportUserId}>
                 <tr>
                     <td><label for="reportDisplayName">Display Name: </label>
                     <td><input type=text name="reportDisplayName" placeholder="Display Name" value=#{renderMaybeText reportDisplayName}>
                 <tr>
                     <td><label for="reportIpAddress">IP Address: </label>
-                    <td><input type=text name="reportIpAddress" placeholder="IP Address" value=#{renderMaybeText reportIpAddress}>
+                    <td><input type=text required name="reportIpAddress" placeholder="IP Address" value=#{renderMaybeText reportIpAddress}>
                 <tr>
                     <td><label for="email">Email: </label>
                     <td><input type=text name="email" placeholder="Email" value=#{renderMaybeText reportEmail}>
@@ -83,7 +83,7 @@ postAddR = do
                     <td><input type=text name="reportName" placeholder="Reporter Name" value=#{renderMaybeText reportReporterName}>
                 <tr>
                     <td><label for="staffMember">Staff Member (you): </label>
-                    <td><input type=text name="staffMember" placeholder="Staff Member:">
+                    <td><input type=text required name="staffMember" placeholder="Staff Member:">
                 <tr>
                     <td><label for="correctionIssued">Correction Issued: </label>
                     <td><input type=text name="correctionIssued" placeholder="Correction Issued:">
