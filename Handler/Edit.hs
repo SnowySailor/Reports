@@ -15,7 +15,7 @@ getEditR reportId = do
                         <td><input type=text required name=staffMember value=#{reportStaffMember report}>
                     <tr>
                         <td><label for="correctionIssued">Correction Issued:
-                        <td><input type=text name=correctionIssued value=#{renderMaybeText $ reportCorrectionIssued report}>
+                        <td>^{renderCorrectionTypeOption $ renderMaybeText $ reportCorrectionIssued report}
                     <tr>
                         <td><label for="incidentSummary">Incident Summary:
                         <td>

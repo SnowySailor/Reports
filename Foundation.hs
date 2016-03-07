@@ -395,11 +395,14 @@ renderReportTypeOption = [hamlet|
             <option value=#{option}>#{option}
     |]
 
-renderCorrectionTypeOption :: t -> Text.Blaze.Internal.MarkupM ()
-renderCorrectionTypeOption = [hamlet|
+renderCorrectionTypeOption :: Text -> t -> Text.Blaze.Internal.MarkupM ()
+renderCorrectionTypeOption selected = [hamlet|
     <select name="correctionIssued">
         $forall option <- getCorrectionTypes
-            <option value=#{option}>#{option}
+            $if option == selected
+                <option value=#{option} selected>#{option}
+            $else
+                <option value=#{option}>#{option}
     |]
 
 like :: EntityField record Text -> Text -> Filter record

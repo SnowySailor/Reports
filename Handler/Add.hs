@@ -1,6 +1,7 @@
 module Handler.Add where
 
 import Import
+import Data.Text as T
 
 getAddR :: Handler Html
 getAddR = defaultLayout [whamlet|
@@ -32,7 +33,7 @@ getAddR = defaultLayout [whamlet|
                     <td><input type=text required name="staffMember" placeholder="Staff Member:">
                 <tr>
                     <td><label for="correctionIssued">Correction Issued: </label>
-                    <td>^{renderCorrectionTypeOption}
+                    <td>^{renderCorrectionTypeOption $ T.pack ""}
                 <tr>
                     <td><label for="incidentSummary">Incident Summary: </label>
                     <td>
